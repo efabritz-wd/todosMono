@@ -17,6 +17,7 @@ The project is organized in a **monorepository** with an orchestrating `docker-c
 ---
 
 ## Repository Structure
+```
 project-root
 │
 ├─ /frontend # React app
@@ -26,6 +27,7 @@ project-root
 │ └─ docker-compose.yml
 │
 └─ docker-compose.yml # Orchestrates frontend, Supabase, and Mailpit
+```
 
 ---
 
