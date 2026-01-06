@@ -11,13 +11,21 @@ The project is organized in a **monorepository** with an orchestrating `docker-c
 - React frontend with DevContainer setup for consistent development environment
 - Backend powered by **Supabase** (self-hosted)
 - Local email testing with **Mailpit** container
-- Monorepo structure for easy orchestration
-- Dockerized development workflow using **docker-compose**
+- Monorepo structure for orchestration
+- Development workflow using **docker-compose**
 
 ---
 
 ## Repository Structure
-
+project-root
+│
+├─ /frontend # React app
+│ └─ .devcontainer # VS Code DevContainer setup with Dockerfile
+│
+├─ /supabase # Self-hosted Supabase setup
+│ └─ docker-compose.yml
+│
+└─ docker-compose.yml # Orchestrates frontend, Supabase, and Mailpit
 
 ---
 
