@@ -1,0 +1,25 @@
+version: "3.9"
+
+include:
+  - ./supabase/docker/docker-compose.yml
+
+services:
+  supabase-mail:
+    image: axllent/mailpit:latest
+    container_name: supabase-mail
+    ports:
+      - "8025:8025"  # Web UI for viewing emails
+      - "1025:1025"  # SMTP server
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ./frontend:/workspace
+    ports:
+      - "5173:5173"
+    command: npm run dev -- --host
+    depends_on:
+      - kong
