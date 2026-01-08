@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import { useState, useEffect} from 'react';
 import { supabase } from '../supabase-client';
 import '../todos.css';
 
@@ -17,12 +17,9 @@ export default function Todos({ session }) {
 
     const [todos, setTodos] = useState([]);
     const [title, setTitle] = useState('');
-    const [editId, setEditId] = useState(null);
     const [text, setText] = useState('');
     const [newDescription, setNewDescription] = useState("");
     const [newTitle, setNewTitle] = useState("");
-
-    const [newTodo, setNewTodo] = useState({ title: "", text: "" });
 
  const fetchTodos = async () => {
     const { error, data } = await supabase
@@ -83,20 +80,7 @@ export default function Todos({ session }) {
   const addTodo = async (e) => {
     e.preventDefault();
 
-    if (editId) {
-      const { data, error } = await supabase
-        .from("todos")
-        .update({ title, text })
-        .eq("id", editId);
-
-      if (error) {
-        console.error("Error updating todo: ", error.message);
-        return;
-      }
-     
-      setTodos((prev) => [...prev, data]);
-    } else {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("todos")
         .insert({ title, text, user_auth_id: session.user.id })
         .select()
@@ -106,9 +90,6 @@ export default function Todos({ session }) {
         console.error("Error adding todo: ", error.message);
         return;
       }
-
-      setTodos((prev) => [...prev, data]);
-    }
 
     setTitle("");
     setText("");
@@ -160,8 +141,7 @@ export default function Todos({ session }) {
           onChange={(e) => setText(e.target.value)}
           className="textarea"
         />
-        <button onClick={addTodo} className="add-button">
-          {editId ? 'Update' : 'Add'} Todo
+        <button onClick={addTodo} className="add-button">Add Todo
         </button>
       </div>
       <ul className="list">
