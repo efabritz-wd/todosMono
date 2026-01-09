@@ -36,7 +36,7 @@ project-root
 ### Prerequisites
 
 - [Docker](https://www.docker.com/products/docker-desktop/) installed and running.
-- [Node.js](https://nodejs.org/) (optional if using DevContainers).
+- [Node.js](https://nodejs.org/) (optional if using Docker automation or DevContainers).
 
 ### Setup Instructions
 
@@ -56,14 +56,31 @@ project-root
    cp supabase/docker/.env.example supabase/docker/.env
    ```
 
-3. **Start the services:**
+3. **Database Schema Automation:**
+   The `docker-compose.yml` is configured to automatically initialize the Supabase database with the necessary schema (tables and policies) on first startup.
+
+4. **Install Dependencies (Frontend):**
+   You have two options for installing Node.js dependencies:
+
+   - **Option A: Automated (Recommended)**
+     The `docker-compose.yml` is configured to run `npm install` inside the container automatically if the `node_modules` folder is missing. Simply proceed to the next step.
+
+   - **Option B: Manual**
+     If you have Node.js installed on your host, run:
+     ```bash
+     cd frontend
+     npm install
+     cd ..
+     ```
+
+5. **Start the services:**
    Run the following command in the project root:
    ```bash
    docker-compose up -d
    ```
-   This will start the Supabase backend, the frontend application, and the Mailpit service.
+   This will start the Supabase backend, the frontend application (with automatic `npm install` if needed), and the Mailpit service. The database schema (including the `todos` table and security policies) will also be initialized automatically.
 
-4. **Access the application:**
+6. **Access the application:**
    - **Frontend:** [http://localhost:5173](http://localhost:5173)
    - **Supabase Dashboard:** [http://localhost:8000](http://localhost:8000)
    - **Mailpit:** [http://localhost:8025](http://localhost:8025)
