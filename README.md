@@ -31,12 +31,44 @@ project-root
 
 ---
 
-## Services
+## Getting Started
 
-| Service        | URL                   |
-|----------------|----------------------|
-| Frontend       | [http://localhost:5173](http://localhost:5173) |
-| Supabase API   | [http://localhost:8000](http://localhost:8000) |
-| Mailpit        | [http://localhost:8025](http://localhost:8025) |
+### Prerequisites
 
----
+- [Docker](https://www.docker.com/products/docker-desktop/) installed and running.
+- [Node.js](https://nodejs.org/) (optional if using DevContainers).
+
+### Setup Instructions
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd todos-mono
+   ```
+
+2. **Set up environment variables:**
+   Copy the example environment files to their active locations:
+   ```bash
+   # For the frontend
+   cp frontend/.env.example frontend/.env
+
+   # For the Supabase backend
+   cp supabase/docker/.env.example supabase/docker/.env
+   ```
+
+3. **Start the services:**
+   Run the following command in the project root:
+   ```bash
+   docker-compose up -d
+   ```
+   This will start the Supabase backend, the frontend application, and the Mailpit service.
+
+4. **Access the application:**
+   - **Frontend:** [http://localhost:5173](http://localhost:5173)
+   - **Supabase Dashboard:** [http://localhost:8000](http://localhost:8000)
+   - **Mailpit:** [http://localhost:8025](http://localhost:8025)
+
+## Troubleshooting
+
+- **Port in use:** Ensure that ports `5173`, `8000`, `8025`, and `5432` are not being used by other applications.
+- **Docker Compose:** Make sure you are using a recent version of Docker Compose (v2+).
