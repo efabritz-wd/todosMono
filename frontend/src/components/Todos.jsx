@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../supabase-client';
 import '../todos.css';
 
@@ -15,13 +15,13 @@ import '../todos.css';
  */
 export default function Todos({ session }) {
 
-    const [todos, setTodos] = useState([]);
-    const [title, setTitle] = useState('');
-    const [text, setText] = useState('');
-    const [newDescription, setNewDescription] = useState("");
-    const [newTitle, setNewTitle] = useState("");
+  const [todos, setTodos] = useState([]);
+  const [title, setTitle] = useState('');
+  const [text, setText] = useState('');
+  const [newDescription, setNewDescription] = useState("");
+  const [newTitle, setNewTitle] = useState("");
 
- const fetchTodos = async () => {
+  const fetchTodos = async () => {
     const { error, data } = await supabase
       .from("todos")
       .select("*")
@@ -66,31 +66,38 @@ export default function Todos({ session }) {
       return;
     }
 
-      setTodos((prev) =>
-        prev.map((todo) =>
+    setTodos((prev) =>
+      prev.map((todo) =>
         todo.id === id
-            ? { ...todo, ...updateData }
-            : todo
-        )
-      );
+          ? { ...todo, ...updateData }
+          : todo
+      )
+    );
     setNewTitle("");
     setNewDescription("");
   };
-  
+
   const addTodo = async (e) => {
     e.preventDefault();
 
-      const { error } = await supabase
-        .from("todos")
-        .insert({ title, text, user_auth_id: session.user.id })
-        .select()
-        .single();
+    const { data, error } = await supabase
+      .from("todos")
+      .insert({ title, text, user_auth_id: session.user.id })
+      .select()
+      .single();
 
-      if (error) {
-        console.error("Error adding todo: ", error.message);
-        return;
-      }
+    if (error) {
+      console.error("Error adding todo: ", error.message);
+      return;
+    }
 
+    if (data) {
+      setTodos((prev) => {
+        // Prevent duplicate if real-time already added it
+        if (prev.some((t) => t.id === data.id)) return prev;
+        return [...prev, data];
+      });
+    }
     setTitle("");
     setText("");
   };
@@ -108,11 +115,32 @@ export default function Todos({ session }) {
         { event: "INSERT", schema: "public", table: "todos" },
         (payload) => {
           const newTodo = payload.new;
-          setTodos((prev) => [...prev, newTodo]);
+          setTodos((prev) => {
+            if (prev.some((todo) => todo.id === newTodo.id)) return prev;
+            return [...prev, newTodo];
+          });
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "todos" },
+        (payload) => {
+          const updatedTodo = payload.new;
+          setTodos((prev) =>
+            prev.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
+          );
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "todos" },
+        (payload) => {
+          const deletedId = payload.old.id;
+          setTodos((prev) => prev.filter((todo) => todo.id !== deletedId));
         }
       )
       .subscribe((status) => {
-        console.log("Subscription: ", status);
+        console.log("Subscription status:", status);
       });
 
     return () => {

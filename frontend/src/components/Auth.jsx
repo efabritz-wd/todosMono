@@ -8,17 +8,17 @@ export default function Auth() {
   const [name, setName] = useState('')
   const [isLogin, setIsLogin] = useState(false)
 
-  const handleAuth =  async (e) => {
+  const handleAuth = async (e) => {
     e.preventDefault();
 
     setLoading(true)
-    
+
     let error
-    
+
     if (isLogin) {
-      const { error: signInError } = await supabase.auth.signInWithPassword({ 
-        email, 
-        password 
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password
       })
       error = signInError
     } else {
@@ -76,4 +76,4 @@ export default function Auth() {
       </p>
     </div>
   )
-}
+} 

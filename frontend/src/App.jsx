@@ -43,34 +43,36 @@ function App() {
       )}
     </>
   );
-/*
-  useEffect(() => {
-    
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    // Listen for changes (login, logout, etc.)
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  return (
-    <div className="App">
-      {!session ? (
-        <Auth />
-      ) : (
-        <Todos session={session} />
-      )}
-    </div>
-  );*/
+  /*
+    useEffect(() => {
+      
+      // Get initial session
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        setSession(session);
+      });
+  
+      // Listen for changes (login, logout, etc.)
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_event, session) => {
+        setSession(session);
+      });
+  
+      return () => subscription.unsubscribe();
+    }, []);
+  
+    return (
+      <div className="App">
+        {!session ? (
+          <Auth />
+        ) : (
+          <Todos session={session} />
+        )}
+      </div>
+    );*/
 }
+
+
 
 export default App;
 

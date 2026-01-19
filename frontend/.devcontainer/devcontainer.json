@@ -2,6 +2,8 @@
   "name": "Todo Frontend",
   "context": "..",
   "dockerFile": "Dockerfile",
-  "forwardPorts": [5173],
+  "forwardPorts": [
+    5173
+  ],
   "postCreateCommand": "npm install"
 }
